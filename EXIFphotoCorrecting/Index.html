@@ -63,8 +63,8 @@
                                             Either use your mobile phone's camera (especialy IPhone's front cameras)
                                             or download some EXIF property pictures by click the links below.
                                             <br />
-                                            <a href="" class="btn-link" target="_blank"> Exif Photo 1 (Rotated Right)</a>
-                                            <a href="" class="ml-3 btn-link" target="_blank">Exif Photo 2 (Rotated Left)</a>
+                                            <a href="https://raw.githubusercontent.com/muammerkeles/exif-photos-correct/master/EXIFphotoCorrecting/Content/images/DSC_160s5.jpg" class="btn-link" target="_blank"> Exif Photo 1 (Rotated Right)</a>
+                                            <a href="https://raw.githubusercontent.com/muammerkeles/exif-photos-correct/master/EXIFphotoCorrecting/Content/images/Landscape_4.jpg" class="ml-3 btn-link" target="_blank">Exif Photo 2 (Rotated Left)</a>
 
                                                 <hr />
                                                 Then try to upload thru this page.
@@ -181,7 +181,7 @@
                             ctx.drawImage(exif_picture, 0, 0);
                             return_src = $("#canvas_exif")[0].toDataURL();
                             $("#canvas_exif").remove();
-                            $("#previmage").removeClass("d-none").append("<div class='col-12 col-md-6'><div class='maxw right'><p>Düzeltilmiş Resim</p><img src='" + return_src + "' /></div></div>");
+                            $("#previmage").removeClass("d-none").append("<div class='col-12 col-md-6'><div class='maxw right'><p>Corrected Photo</p><img src='" + return_src + "' /></div></div>");
                             $("#previmage").append("<div class='col-12 col-md-12'><div class='alert alert-danger'><strong>As a conclusion</strong><p>" + _textresult + "</p></div></div>");
                         });
                     };
