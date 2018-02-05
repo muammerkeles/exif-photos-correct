@@ -12,4 +12,4 @@ Then try to upload thru <a href="https://codepen.io/muammer/pen/aqNMxR" class="m
 You'll see the difference clearly.
 
 
-<img src="https://raw.githubusercontent.com/muammerkeles/exif-photos-correct/master/EXIFphotoCorrecting/Content/images/conclusion-capture-large.JPG" width="300"/>
+<img src="https://raw.githubusercontent.com/muammerkeles/exif-photos-correct/master/EXIFphotoCorrecting/Content/images/conclusion-capture-large.JPG" width="800"/>
