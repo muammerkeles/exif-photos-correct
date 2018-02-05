@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>EXIF Photo Correcting</title>
+    <meta name="author" content="Muammer Keleş" />
+    <meta name="description" content="Github  Project Sample - Related to Exif Photos (taken by IPhone Camera)">
+    <meta name="keywords" content="EXIT Photos, rotate photo, IPhone camera taken rotate photos">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="Content/css/bootstrap.css" rel="stylesheet" />
+    <script src="Content/js/jquery-3.2.1.js"></script>
+    <script src="Content/js/bootstrap.min.js"></script>
+    <script src="Content/js/modernizr-2.6.2.js"></script>
+    <script src="Content/js/exif.js"></script>
+
+    <style>
+        #previmage {
+            margin-top: 15px;
+        }
+
+            #previmage .maxw {
+                background: #9e9e9e;
+                padding: 15px 10px 25px;
+                text-align: center;
+                box-shadow: 1px 1px 1px #c1c1c1;
+                border: solid 1px white;
+            }
+
+                #previmage .maxw.right {
+                    background: #9e9e9e;
+                }
+
+                #previmage .maxw p {
+                    text-align: center;
+                    font-size: 14px;
+                    color: white;
+                }
+
+                #previmage .maxw img {
+                    box-shadow: 1px 1px 1px #717171;
+                    border: solid 1px white;
+                }
+
+        img {
+            max-width: 100%;
+        }
+    </style>
+
+    
+</head>
+<body>
+    <div id="main">
+        <section id="panel">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="cover">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mt-2 alert alert-info">
+                                        <h2>Exif Photo Upload and fixing sample.</h2>
+                                        <p>
+                                            Either use your mobile phone's camera (especialy IPhone's front cameras)
+                                            or download some EXIF property pictures by click the links below.
+                                            <br />
+                                            <a href="" class="btn-link" target="_blank"> Exif Photo 1 (Rotated Right)</a>
+                                            <a href="" class="ml-3 btn-link" target="_blank">Exif Photo 2 (Rotated Left)</a>
+
+                                                <hr />
+                                                Then try to upload thru this page.
+                                                <br />
+                                                You'll see the difference clearly.
+</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-3">
+                                <input id="fileuploader1" type="file" />
+                                <div class="d-none row" id="previmage">
+                                    önizleme
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        $(function () {
+            $(".user-info .profile-photo").on("click", function () {
+                $('#upload-photo').trigger("click");
+            });
+            $('#fileuploader1').on('change', function (e) {
+                var file = e.target.files[0];
+
+                if (file) {
+                    if (/^image\//i.test(file.type)) {
+                        //$('.previmage').addClass('loading');
+                        $("#previmage").html("")
+                        readFile(file);
+                    } else {
+                        alert("You choose an incorrect format picture!");
+                    }
+                }
+            });
+
+            function readFile(file) {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    $("#previmage").removeClass("d-none").append("<div class='col-12 col-md-6'><div class='maxw left'><p>Original Upload</p><img src='" + reader.result + "' /></div></div>");
+                    var rotated_src;
+                    var exif_picture = new Image;
+                    exif_picture.src = reader.result;  
+                    var _textresult = "";
+                    exif_picture.onload = function () {
+                        EXIF.getData(exif_picture, function () {
+                            var orientation = EXIF.getTag(this, "Orientation");
+                            var canvas = $('<canvas id="canvas_exif" width="' + exif_picture.width + '" height="' + exif_picture.height + '"></canvas>');
+                            $("body").append(canvas);
+                            var ctx = $("#canvas_exif")[0].getContext('2d');
+                            ctx.translate(exif_picture.width * 0.5, exif_picture.height * 0.5);
+                            var corrected = true;
+                            switch (orientation) {
+                                case 2:
+                                    // horizontal flip
+                                    _textresult=("Horizontal Flip Photo.\n[Resim yatay olarak ters çevrilmişti.]\n");
+                                    ctx.translate(canvas.width, 0);
+                                    ctx.scale(-1, 1);
+                                    break;
+                                case 3:
+                                    _textresult = ("[Rotated 180 Left.\n[Resim 180° sola dönüktü.]\n");
+                                    ctx.translate(canvas.width, canvas.height);
+                                    ctx.rotate(Math.PI);
+                                    break;
+                                case 4:
+                                    _textresult = ("Vertical Flip.\n[Resim dikey olarak ters çevrilmişti.]\n");
+                                    ctx.translate(0, canvas.height);
+                                    ctx.scale(1, -1);
+                                    break;
+                                case 5:
+                                    // vertical flip + 90 rotate right
+                                    _textresult = ("Vertical Flip And Rotated 90 degrees.\n[Resim dikey ve 90°   olarak tersti.]\n");
+                                    ctx.rotate(0.5 * Math.PI);
+                                    ctx.scale(1, -1);
+                                    break;
+                                case 6:
+                                    _textresult = ("Rotated 90 degrees.\n[Resim 90 derece sağa cevrilmiş.]\n");
+                                    ctx.rotate(0.5 * Math.PI);
+                                    ctx.translate(0, -canvas.height);
+                                    break;
+                                case 7:
+                                    _textresult = ("Horizontal and 90 degrees Right.\n[Resim 90 derece sağa ve yatay arak ters.]\n");
+
+                                    ctx.rotate(0.5 * Math.PI);
+                                    ctx.translate(canvas.width, -canvas.height);
+                                    ctx.scale(-1, 1);
+                                    break;
+                                case 8:
+                                    _textresult = ("Rotated 90 degrees Left.\n[Resim 90 derece sola dönüktü]\n");
+
+                                    ctx.rotate(-0.5 * Math.PI);
+                                    ctx.translate(-canvas.width, 0);
+                                    break;
+                                default:
+                                    corrected = false;
+                                    _textresult = ("The photo doesn't have Exif property.\n[Fotoğrafta herhangi bir rotasyon (tanımlanmış bir exif özelliği) yok.\n");
+                                    break;
+                            }
+                            //console.log("Resimdeki EXIF hataları (varsa ) düzeltildi");
+                            if (corrected == false) {
+                                _textresult += ("Because the  photo you uploaded is not an EXIF photo! \n [Bu resimde herhangi bir rotasyon uygulanmamış olduğu için her hangi bir işlem yapılmaı.]\n")
+                            }
+                            else{
+                                _textresult += ("\nCorrected. [Düzeltildi]\n");
+
+                            }
+                            alert(_textresult);
+                            ctx.translate(-exif_picture.width * 0.5, -exif_picture.height * 0.5);
+                            ctx.drawImage(exif_picture, 0, 0);
+                            return_src = $("#canvas_exif")[0].toDataURL();
+                            $("#canvas_exif").remove();
+                            $("#previmage").removeClass("d-none").append("<div class='col-12 col-md-6'><div class='maxw right'><p>Düzeltilmiş Resim</p><img src='" + return_src + "' /></div></div>");
+                            $("#previmage").append("<div class='col-12 col-md-12'><div class='alert alert-danger'><strong>As a conclusion</strong><p>" + _textresult + "</p></div></div>");
+                        });
+                    };
+                    //processFile(reader.result, file.type);
+                };
+                reader.onerror = function () {
+                    alert('There was an error reading the file!');
+                };
+                reader.readAsDataURL(file);
+
+            }
+        });
+    </script>
+</body>
+</html>
