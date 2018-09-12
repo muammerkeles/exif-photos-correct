@@ -1,9 +1,9 @@
-# exif-photos-correct
-Exif Photo Sample - Correcting photo taken by front cameras of mobile phones
+# adjusting exif-photos  
+taken by front cameras of some mobile phones
 
 Either use your mobile phone's front cameras or download EXIF property pictures by click the links below.
 
-<a href="https://raw.githubusercontent.com/muammerkeles/exif-photos-correct/master/EXIFphotoCorrecting/Content/images/DSC_160s5.jpg" class="btn-link" target="_blank"> Download Exif Photo 1 (Rotated Right)</a>
+<a href="https://raw.githubusercontent.com/muammerkeles/exif-photos-correct/master/EXIFphotoCorrecting/Content/images/DSC_160s5.jpg" class="btn-link" target="_blank"> Download Exif Photo  1 (Rotated Right)</a>
       
 <a href="https://raw.githubusercontent.com/muammerkeles/exif-photos-correct/master/EXIFphotoCorrecting/Content/images/Landscape_4.jpg" class="ml-3 btn-link" target="_blank">Download Exif Photo 2 (Rotated Left)</a>
 
